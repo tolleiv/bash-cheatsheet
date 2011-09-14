@@ -1,0 +1,436 @@
+\documentclass[landscape,letter,10pt]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+\pagestyle{empty}
+
+\setlength{\oddsidemargin}{0.5in}
+\setlength{\evensidemargin}{0.5in}
+\setlength{\textwidth}{11in}
+
+
+\setlength{\topmargin}{-0.75in}
+\setlength{\textheight}{7.25in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+\newlength{\MyLen}
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+%\setlength{\premulticols}{1pt}
+%\setlength{\postmulticols}{1pt}
+%\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{4pt}
+
+\begin{center}
+     \Large{\textbf{BASH Cheat Sheet}} \\
+\end{center}
+
+\section{Befehlszeilenoptionen}
+\begin{tabular}{@{}ll@{}}
+\verb!--debugger! & Debugger Modus aktivieren \\
+\verb!--dump-strings! & Liste der PO-Strings \\
+\verb!--version! & Versionsausgabe \\
+\verb!--help! & Kurzhilfe \\
+\verb!--rcfile! \textit{datei} & alternative Konfigurationsdatei laden \\
+\verb!--login! & Login-Shell starten \\
+\verb!--noediting! & Deaktiviert Editierfunktionen \\
+\verb!--noprofile! & ohne Profildateien starten \\
+\verb!--norc! & ohne private Konfiguration starten \\
+\verb!--posix! & POSIX-Modus aktivieren \\
+\verb!--restricted! & eingeschränkte Shell starten \\
+\verb!--verbose! & erweiterte Ausgabe d. Befehlszeilen \\
+\verb!--c! \textit{befehl} & Befehlszeile ausführen \\
+\verb!--i! & interaktive Shell starten \\
+\verb!--s! & Eingaben von stdin lesen \\
+\end{tabular}
+
+\section{Startup-Dateien}
+Folgende Dateien werden, wenn sie vorhanden sind, \\
+im entsprechenden Modus geladen:
+\subsection{Bash als interaktive Shell}
+\begin{tabular}{@{}ll@{}}
+Login: & \verb!~/.bashrc! 
+\end{tabular}
+
+\subsection{Bash als Login-Shell}
+\begin{tabular}{@{}ll@{}}
+Login: & \verb!/etc/profile! \\
+&\verb!~/.bash_profile! \\
+&\verb!~/.bash_login! \\
+&\verb!~/.profile! \\
+Logout: & \verb!~/.bash_logout! 
+\end{tabular}
+
+\subsection{Bash als sh-Shell}
+\begin{tabular}{@{}ll@{}}
+Login: & \verb!~/.profile! 
+\end{tabular}
+
+\subsection{Bash als Remote-Shell}
+\begin{tabular}{@{}ll@{}}
+Login: & \verb!~/.bashrc! 
+\end{tabular}
+
+\section{Befehle verbinden}
+\subsection{Listen}
+\begin{tabular}{@{}ll@{}}
+\texttt{befehl1 ; befehl2} & Liste \\
+\texttt{befehl1 \&\& befehl2} & UND -- abhängige Ausführung \\
+\texttt{befehl1 \textbar\textbar  befehl2} & ODER -- alternative Ausführung \\ 
+\end{tabular}
+\subsection{Blöcke}
+Blöcke haben zur Folge das eine Liste von Befehlen als Einheit betrachtet wird, der Rückgabewert entspricht dem Rückgabewertes des letzten Befehls in der Liste. \\
+\smallskip
+\begin{tabular}{@{}ll@{}}
+\verb!{ befehlsliste }! & einfacher Block \\
+\verb!( befehlsliste )! & Ausführung in einer Subshell
+\end{tabular}
+\subsection{Pipe(line)s}
+\begin{tabular}{@{}ll@{}}
+\verb! befehl1 | befehl2 ! & Verkettung inkl. Verknüpfung \\
+&der Standard-I/O Kanäle
+\end{tabular}
+
+\section{Umleitungen}
+\subsection{Standardkanäle}
+\begin{tabular}{@{ }ll@{ }ll@{ }}
+Descriptor 0 & Standardeingabe & (\textit{/dev/stdin}) \\
+Descriptor 1 & Standardausgabe & (\textit{/dev/stdout}) \\
+Descriptor 2 & Standardfehler & (\textit{/dev/stderr})
+\end{tabular}
+\subsection{Redirections}
+\begin{tabular}{@{~~~~~}ll@{}}
+\textit{Code} & \textit{Funktion} \\
+\texttt{\textless{}n} & Eingabeumleitung (Vorgabe \textit{n}=0) \\
+\texttt{\textgreater{}n} & Ausgabeumleitung (Vorgabe \textit{n}=1) \\
+\texttt{n\&\textgreater{}file} & Ausgabeumleitung von Kanel \textit{n} in Datei \\
+\texttt{n\textgreater\&m} & verbindet Kanal \textit{n} mit \textit{m} \\
+\texttt{n\textgreater{}m} & kopiert \textit{n} als Ausgabekanel \textit{m}\\
+\texttt{n\textless{}m} & kopiert \textit{n} als Eingabekanel \textit{m}\\
+\texttt{\textgreater\&file} & Standardfehler- und -ausgabeumleitung in \textit{file} \\
+\texttt{\&\textgreater{}file} & Standardfehler- und -ausgabeumleitung in \textit{file} \\
+\texttt{n\textgreater\textgreater{}file} & \textit{n} als Ausgabekanal an \textit{file} anhängen \\
+\texttt{n\textless\&-} & schließt Eingabekanal (Vorgabe \textit{n}=0)\\
+\texttt{n\textgreater\&-} & schließt Ausgabekanal (Vorgabe \textit{n}=1)\\
+\texttt{n\textless\textgreater{}file} & \textit{n} als Ein- und Ausgabekanal mit \textit{file} verbinden \\
+\texttt{\ldots|\ldots} & Pipe: verbindet vorige Standardausgabe mit \\
+& aktueller Standardeingabe
+\end{tabular}
+
+\section{Quoting}
+\texttt{\textbackslash}, Backslash schütz das folgende Zeichen \\
+\texttt{"}, doppelte Hochkommata schützen die eingeschlossenen Teil der Befehlszeile und erlauben die Auswertung von \textit{\$Variablen} \\
+\texttt{\'}, einfache Hochkommata verhindern die Auswertung \textbf{aller} Metazeichen 
+
+\section{Expandierung}
+\subsection{Klammerexpandierung}
+\texttt{befehl \{a,b,c\}} entspricht der Einzelausführung von \\
+\texttt{befehl a; befehl b; befehl c} \\
+\texttt{befehl \{a..x\}} entspricht der Einzelausführung von \\
+\texttt{befehl a;\ldots; befehl x} \\
+Beispiel: \texttt{echo \{1,2,3\}\{a..c\}}\\
+\textit{ergibt}: 1a 1b 1c 2a 2b 2c 3a 3b 3c 
+
+\subsection{Parameterersetzung}
+\begin{tabular}{@{}ll@{}}
+\texttt{\$Name} o. \texttt{\$\{Name\}} & wird mit dem entsp. Inhalt ersetzt \\
+\texttt{\$\{Name:Offset:Länge\}} & Teilstring von \$\{Name\} extr. \\
+\texttt{\$\{Name/Pat/Rep\}} & expandiert Inhalt von \$\{Name\} \\
+& ersetzt \textit{Pat} durch \textit{Rep} \\
+\texttt{\$((ausdruck))} & Inhalt wird als arithmetischer \\
+& Ausdruck ausgewertet- (vgl. C-Syntax) \\
+\texttt{\$\{Name:+Wert\}} & exisitiert \$\{Name\} wird \textit{Wert} zurückgeg. \\
+& \\
+\end{tabular} \\
+Existiert \$\{Name\} nicht dann wird mit: 
+\begin{tabular}{@{}ll@{}}
+\texttt{\$\{Name:-Wert\}} & \textit{Wert} expandiert \\
+\texttt{\$\{Name:=Wert\}} & \textit{Wert} zugeordnet und expandiert \\
+\texttt{\$\{Name:?Msg\}} &  eine Warung (\textit{Msg}) ausgegeben \\
+\end{tabular}
+
+\subsection{Tildenersetzung}
+\begin{tabular}{@{}ll@{}}
+\texttt{\~} & ergibt den Inhalt von \textit{\$HOME} \\
+\texttt{\~{}Username} & Inhalt von \textit{\$HOME} für den entsp. Nutzer \\
+\texttt{\~{}+Nummer} & expandiert aus \textit{\$DIRSTACK} entsp. \texttt{dirs +Nummer} \\
+\texttt{\~{}-Nummer} & expandiert aus \textit{\$DIRSTACK} entsp. \texttt{dirs -Nummer}
+\end{tabular}
+
+\section{Befehlszeile bearbeiten \lbrack{}EMACS\rbrack{}}
+\subsection{Moving}
+\begin{tabular*}{\textwidth}{@{}ll@{~~~~~~~}ll@{}ll}
+\verb!Ctrl+a! & zum Zeilenanfang & \verb!Ctrl+e! & zum Zeilenende \\
+\verb!Ctrl+f! & Zeichen nach rechts & \verb!Ctrl+b! & Zeichen nach links \\
+\verb!Meta+f! & Wort nach rechts & \verb!Meta+b! & Wort nach links \\
+\verb!Ctrl+l! & Terminalausg. erneuern
+\end{tabular*}
+\subsection{History}
+\begin{tabular*}{\textwidth}{@{}ll@{~~~~~}ll@{}ll}
+\verb!Enter! & Zeile wird in die History       & \verb!Ctrl+p! & vorige Zeile\\ 
+& eingefügt und ausgeführt & \verb!Ctrl+n! & nächste Zeile \\
+\texttt{Meta+\textless} & erste Zeile der History & \verb!Ctrl+r! & Suche rückwärts \\
+\texttt{Meta+\textgreater} & letzte Zeile der History & \verb!Ctrl+s! & Suche vorwärts
+\end{tabular*}
+\subsection{Textmanipulation}
+\begin{tabular*}{\textwidth}{@{}ll@{~~~~~}ll@{}ll}
+\verb!Backsp.! & linkes Zeichen löschen &\verb!Ctrl+d! & akt. Zeichen löschen \\
+\verb!Ctrl+t! & Zeichen vertauschen & \verb!Meta+t! & Wörter vertauschen \\
+\verb!Meta+c! & Wort in Großbuchst. & \verb!Meta+l! & Wort in Kleinbuchst. 
+\end{tabular*}
+\subsection{Löschen und Killen}
+Der \textit{Killring} nimmt gelöschte Passagen\\
+beim Killen auf und ermöglicht den späteren Zugriff.
+\begin{tabular}{@{}ll@{}}
+& \\
+\verb!Ctrl+y! & zuletzt gekilltest wiederherstellen\\
+\verb!Meta+y! &  \textit{Killring} rotieren\\
+\verb!Ctrl+k! & bis zum Zeilenende löschen und in \textit{Killring} ablegen\\
+\verb!Ctrl+u! & bis zum Zeilenanfang löschen und in \textit{Killring} ablegen\\
+\verb!Meta+d! & killt vom Cursor zum Wortende\\
+\verb!Ctrl+w! & nächstes Wort killen\\
+\end{tabular}
+
+\subsection{Komplettierungen}
+\begin{tabular}{@{}ll@{}}
+\verb!Tab! & komplettieren. wenn möglich \\
+\verb!Meta+Tab! & komplplettieren mit History-Daten \\
+\verb!Meta+?! & Optionen anzeigen \\
+\verb!Meta+*! & Optionen einfügen \\
+\end{tabular}
+\begin{tabular*}{\textwidth}{@{}ll@{~~~~~}ll@{}ll}
+\\
+\verb!Meta+...! & kompl. als ... & \verb!Ctrl+x+...! & Optionen zeigen als ... \\
+\texttt{...+/} & Dateinamen & \texttt{...+!} & Befehlsnamen \\
+\texttt{...+$\sim$} & Usernamen & \texttt{...+\$} & Variablennamen \\
+\texttt{...+@} & Hostnamen 
+\end{tabular*}
+\subsection{Makros}
+\verb!Ctrl+x+(! startet die Aufzeichnung eines Makros. Alle Eingaben bis zu einem \verb!Ctrl+x+)! sind Bestandteil des Makros welches mit \verb!Ctrl+x+e! ausgeführt wird.
+
+\section{Befehlsreferenz}
+Liste über die BASH verfügbarer Befehle, mit \texttt{command} können \\ überlagerte Systemkommandos ausgeführt werden. \\
+\begin{tabular}{@{}ll@{}}
+& \\
+\textit{Befehl} & \textit{Beschreibung} \\
+\texttt{source } &  Befehle aus einer Datei ausführen \\
+\texttt{alias } &  Alias Befehl erstellen \\
+\texttt{bg } &  Job als Hintergrundjob ausführen \\
+\texttt{bind } &   \\
+\texttt{break } &  Schleifendurchlauf abbrechen \\
+\texttt{builtin } &   \\
+\texttt{cd } &  Verzeichnis wechseln \\
+\texttt{aller } & Content Unterprogramm-Aufruf ausg. \\
+\texttt{command } & Befehle ausführen  \\
+\texttt{complete } & Vervollständigungen ausgeben  \\
+\texttt{continue } & Schleifendurchlauf übergehen  \\
+\texttt{declare } &  Variablen definieren \\
+\texttt{dirs } &  Directory-Stack bearbeiten \\
+\texttt{disown } &  Laufende Jobs beenden \\
+\texttt{echo } &  Ausgabe \\
+\texttt{enable } & Befehle (de)aktivieren  \\
+\texttt{eval } &  String als Befehl zusammenf. und ausf. \\
+\texttt{exec } &  Befehl ersetzen/ausführen \\
+\texttt{exit } &  Scriptlauf beenden \\
+\texttt{export } & Umgebungsvariable setzen  \\
+\texttt{fc } & Befehle aus der History bearbeiten \\
+\texttt{fg } & Job im Vordergrund ausführen  \\
+\texttt{getopts } & Shell-Parameter auswerten  \\
+\texttt{hash } & Hash-Wert generieren  \\
+\texttt{help } & Hilfe anzeigen  \\
+\texttt{history } & Befehlsverlauf auswerten  \\
+\texttt{jobs } & Jobs verwalten  \\
+\texttt{kill } & Prozesse und Jobs beenden  \\
+\texttt{let } & Arithmetische Ausdrücke auswerten  \\
+\texttt{local } & Lokale Variablen vereinbaren  \\
+\texttt{logout } & Login-Shell beenden  \\
+\texttt{popd } & Verz. von Directory-Stack lesen  \\
+\texttt{printf } &  Formatierte Ausgabe \\
+\texttt{pushd } & Verz. auf Directory-Stack legen  \\
+\texttt{pwd } & akt. Arbeitsverzeichnis ausgeben  \\
+\texttt{read } &  Zeile von der Standardeingabe lesen \\
+\texttt{readonly } & Konstanten definieren  \\
+\texttt{return } & Unterprog. mit Rückgabewert beenden \\
+\texttt{set } & Umgebungsvariablen verwalten  \\
+\texttt{shift } & Übergabeparameter nachrücken \\
+\texttt{shopt } & Shell-Optionen verwalten  \\
+\texttt{suspend } & Shell-Ausführen aussetzen  \\
+\texttt{test } & Ausdruck auswerten (Erfolgsrückgabe=0) \\
+\texttt{imes } & Nutzer und Systemzeit  \\
+\texttt{trap } & Befehl ausführen wenn ein Signal auftritt  \\
+\texttt{type } &  Befehle beschreiben \\
+\texttt{ulimit } & Resourcen verwalten  \\
+\texttt{umask } & Nutzer-Dateirechte-Maskierung \\
+\texttt{unalias } & Alias verwerfen  \\
+\texttt{wait } &  Befehlende abwarten 
+\end{tabular}
+
+
+\section{Job-Control}
+\begin{tabular}{@{}ll@{}}
+\textit{Befehl} & \textit{Beschreibung} \\
+\texttt{ps } &  alle laufenden Prozesse auflisten \\
+\texttt{kill } &  Signale an Prozesse senden \\
+\texttt{jobs } & eigene Prozesse steuern \\
+\texttt{fg } & Job im Vordergrund ausführen  \\
+\texttt{bg } &  Job als Hintergrundjob ausführen \\
+& \\
+\end{tabular} \\
+Vordergrund-Prozesse laufen können mit\\
+\verb!Ctrl+z! unterbrochen werden. Zugriff auf\\
+Jobs in der Job-Control-Liste hat man über:
+\begin{tabular}{@{}ll@{}}
+& \\
+\textit{JobID} & \textit{Bezug auf:} \\
+\verb!%%! & akuteller Job \\
+\verb!%+! & nächster Job \\
+\verb!%-! & vorheriger Job \\
+\verb!%n! & Jobnummer \textit{n} \\
+\verb!%?bez! & durch \textit{bez} bezeichneter Job \\
+\verb!%bez! & Job mit dem Kommandozeilen-Anfang \textit{bez} \\
+& \\
+\end{tabular}
+
+
+\section{Shell-Scripte}
+%\textit{liste} entspricht einer Befehlsliste (siehe "Befehle verbinden"). 
+
+\subsection{Beispiel-Script}
+\begin{tabular}{@{}l|l@{}}
+\texttt{\#!/bin/bash} & \textit{Shebang} \\
+\texttt{\# Shell Script} & Kommentare mit \texttt{\#} \\
+\verb!befehl1! & beliebige System- o. BASH Befehle \\
+\verb!...! & \\
+\verb!befehln! & \\
+\verb!exit 0! & Rückgabe = 0 für efolgreiche \\
+& Scriptausführung \\
+\end{tabular}
+
+
+\subsection{Parameter}
+\begin{tabular*}{\textwidth}{ll@{~~~~~}ll}
+\texttt{\$*} & String mit allen Paramtern \\
+\texttt{\$@} & Liste aller Paramter \\
+\texttt{\$\#} & Anzahl der Parameter \\
+\texttt{\$?} & Rückgabewert des letzten ausgef. Befehls \\
+\texttt{\$- } & Kurzform der aktiven Shell-Optionen \\
+\texttt{\$\$} & aktuelle PID \\
+\texttt{\$!} & PID des letzten Hintergrund-Prozesses \\
+\texttt{\$0} & Name der Shell bzw. des Scriptes \\
+\texttt{\$\textit{n}} & Parameter \textit{n} \\
+\texttt{\$\_} & Pfad zur Shell bzw. zum Script
+\end{tabular*}
+
+\subsection{Rückgabewerte}
+\begin{tabular}{@{}ll@{~~~~~}ll@{}ll}
+\textit{Code} & \textit{Bedeutung} \\
+\verb!0! & erfolgreich beendet & \verb!1! & allgemeiner Fehler \\
+\verb!126! & Befehl nicht ausführbar & \verb!127! & Befehl nicht auffindbar \\
+\verb!128! & ungültiger Exitcode & \verb!128+n! & Fehler mit Signal \textit{n} \\
+\verb!130! & Abbruch mit \verb!Ctrl+c! & \verb!255*! & Exitcode Out of Range \\
+\end{tabular}
+
+\subsection{Audrücke}
+\texttt{(( \textit{Wert} ))}: arithmetische Auswertung \\
+entspricht \texttt{let} mit dem Argument \textit{Wert} \\
+\texttt{[[ \textit{Wert} ]]}: logische Auswertung \\
+entspricht \texttt{test} mit dem Argument \textit{Wert} \\
+ohne Worttrennung o. Dateinamenexpandierung
+
+\subsubsection{Einfache Operatoren von Test}
+\begin{tabular}{@{}ll@{}}
+\texttt{-a \textit{datei}} & \texttt{-b \textit{datei}} \\~~~~~Datei existiert &~~~~~Blockdatei existiert \\
+\texttt{-c \textit{datei}} & \texttt{-d \textit{datei}} \\~~~~~Zeichengerät existiert &~~~~~Verzeichnis existiert\\
+
+\texttt{-e \textit{datei}} & \texttt{-f \textit{datei}} \\~~~~~Datei existiert &~~~~~echte Datei\\
+\texttt{-g \textit{datei}}  & \texttt{-h \textit{datei}} \\~~~~~setUID ist gesetzt &~~~~~Datei ist ein symb. Link\\
+\texttt{-r \textit{datei}} & \texttt{-s \textit{datei}} \\~~~~~Datei ist lesbar &~~~~~Dateigröße ist größer Null \\
+\texttt{-w \textit{datei}} & \texttt{-x \textit{datei}} \\~~~~~Datei ist schreibbar &~~~~~Datei ist ausführbar \\
+\texttt{-L \textit{datei}} & \texttt{-S \textit{datei}} \\~~~~~Datei ist ein symb. Link &~~~~~Datei ist ein Socket\\
+\texttt{-z \textit{string}} & \texttt{-n \textit{string}} \\~~~~~String ist leer &~~~~~String ist nicht leer
+\end{tabular}
+\subsubsection{Mehrfache Operatoren von Test}
+\begin{tabular}{@{}ll@{}}
+\texttt{\textit{datei1} -nt \textit{datei2}} & \textit{datei1} ist neuer als \textit{datei2} ist \\
+\texttt{\textit{datei1} -ot \textit{datei2}} & \textit{datei1} ist älter als \textit{datei2} ist \\
+\texttt{\textit{datei1} -ef \textit{datei2}} & Dateien bezeichnen eff. die gleiche Datei \\
+\texttt{\textit{string1} == \textit{string2}} & beide Strings sind identisch \\
+\texttt{\textit{string1} != \textit{string2}} & die Strings unterscheiden sich \\
+\texttt{\textit{ARG1} \textit{OP} \textit{ARG2} } & \textit{OP} ist ein Vergleichoperator:\\
+&\textbf{-eq} (gleich), \textbf{-ne} (ungleich),\\
+&\textbf{-lt} (kleiner als), \textbf{-le} (kleiner gleich),\\
+&\textbf{-gt} (größer als), \textbf{-ge} (größer gleich) 
+\end{tabular}
+
+
+\subsection{Kontrollstrukturen}
+\subsubsection{Bedigungen}
+\texttt{if \textit{ausdruck} then \textit{liste}} \\
+~~~~~\texttt{[; elif \textit{ausdruck} then \textit{liste}]} \\
+~~~~~\texttt{[; else \textit{liste}]} \\
+\texttt{fi} \\ 
+\texttt{case \textit{word} in} \\
+~~~~~\texttt{[[(]\textit{muster1}[|\textit{muster2}]...) \textit{liste} ;;]} \\
+\texttt{esac} \\
+\texttt{select \textit{name} [in \textit{words}]; do} \\
+~~~~~\texttt{\textit{liste};} \\
+\texttt{done} \\
+\subsubsection{Schleifen}
+\texttt{for \textit{name} [in \textit{words}]; do \textit{liste}; done} \\
+\texttt{for (( \textit{ausd1}; \textit{ausd2}; \textit{ausd3} )); do \textit{liste}; done} \\
+\texttt{until \textit{ausdruck}; do \textit{liste2}; done} \\
+\texttt{while \textit{ausdruck}; do \textit{liste2}; done} \\
+
+\subsubsection{Unterprogramme}
+\texttt{[function] \textit{func}() \{ liste \} }\\
+\bigskip
+
+
+\rule{0.3\linewidth}{0.25pt}
+\scriptsize
+
+Copyright \copyright\ 2007 Tolleiv Nietsch
+http://www.tu-chemnitz.de/$\sim$toln/proseminar-bash/
+
+
+\end{multicols}
+\end{document}
